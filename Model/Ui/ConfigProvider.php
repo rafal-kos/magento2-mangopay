@@ -2,8 +2,8 @@
 
 namespace Empisoft\Mangopay\Model\Ui;
 
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Empisoft\Mangopay\Gateway\Http\Client\ClientMock;
+use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
  * Class ConfigProvider
@@ -16,8 +16,7 @@ final class ConfigProvider implements ConfigProviderInterface
     protected $config;
 
     /**
-     * @param CcConfig $ccConfig
-     * @param Source $assetSource
+     * @param \Magento\Payment\Model\CcConfig $config
      */
     public function __construct(
         \Magento\Payment\Model\CcConfig $config
