@@ -1,7 +1,3 @@
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
 /*browser:true*/
 /*global define*/
 define(
@@ -93,20 +89,25 @@ define(
                 return 'mangopay';
             },
 
+            /**
+             * Check if payment is active
+             *
+             * @returns {Boolean}
+             */
             isActive: function () {
-                return true;
+                return this.getCode() === this.isChecked();
             },
 
             getCcAvailableTypes: function() {
-                return window.checkoutConfig.payment.mangopay.availableTypes['mangopay'];
+                return window.checkoutConfig.payment.mangopay.availableTypes[this.getCode()];
             },
 
             getCcMonths: function() {
-                return window.checkoutConfig.payment.mangopay.months['mangopay'];
+                return window.checkoutConfig.payment.mangopay.months[this.getCode()];
             },
 
             getCcYears: function() {
-                return window.checkoutConfig.payment.mangopay.years['mangopay'];
+                return window.checkoutConfig.payment.mangopay.years[this.getCode()];
             },
 
             hasVerification: function() {
@@ -114,7 +115,7 @@ define(
             },
 
             getCvvImageUrl: function () {
-                return window.checkoutConfig.payment.mangopay.cvvImageUrl['mangopay'];
+                return window.checkoutConfig.payment.mangopay.cvvImageUrl[this.getCode()];
             },
 
             /**
@@ -126,110 +127,6 @@ define(
                     '" alt="' + $t('Card Verification Number Visual Reference') +
                     '" title="' + $t('Card Verification Number Visual Reference') +
                     '" />';
-            },
-
-            getCcAvailableTypesValues: function() {
-                return _.map(this.getCcAvailableTypes(), function(value, key) {
-                    return {
-                        'value': key,
-                        'type': value
-                    }
-                });
-            },
-            getCcMonthsValues: function() {
-                return _.map(this.getCcMonths(), function(value, key) {
-                    return {
-                        'value': key,
-                        'month': value
-                    }
-                });
-            },
-            getCcYearsValues: function() {
-                return _.map(this.getCcYears(), function(value, key) {
-                    return {
-                        'value': key,
-                        'year': value
-                    }
-                });
-            },
-
-            /**
-             * @returns {Object}
-             */
-            getHostedFields: function () {
-                var self = this,
-                    fields = {
-                        number: {
-                            selector: self.getSelector('cc_number')
-                        },
-                        expirationMonth: {
-                            selector: self.getSelector('expirationMonth'),
-                            placeholder: $t('MM')
-                        },
-                        expirationYear: {
-                            selector: self.getSelector('expirationYear'),
-                            placeholder: $t('YY')
-                        }
-                    };
-
-                if (self.hasVerification()) {
-                    fields.cvv = {
-                        selector: self.getSelector('cc_cid')
-                    };
-                }
-
-                /**
-                 * Triggers on Hosted Field changes
-                 * @param {Object} event
-                 * @returns {Boolean}
-                 */
-                fields.onFieldEvent = function (event) {
-                    if (event.isEmpty === false) {
-                        self.validateCardType();
-                    }
-
-                    if (event.type !== 'fieldStateChange') {
-                        return false;
-                    }
-
-                    // Handle a change in validation or card type
-                    if (event.target.fieldKey === 'number') {
-                        self.selectedCardType(null);
-                    }
-
-                    if (event.target.fieldKey === 'number' && event.card) {
-                        self.isValidCardNumber = event.isValid;
-                        self.selectedCardType(
-                            validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
-                        );
-                    }
-                };
-
-                return fields;
-            },
-
-            /**
-             * Returns state of place order button
-             * @returns {Boolean}
-             */
-            isButtonActive: function () {
-                return this.isActive() && this.isPlaceOrderActionAllowed();
-            },
-
-            /**
-             * @returns {Boolean}
-             */
-            isShowLegend: function () {
-                return true;
-            },
-
-            getTransactionResults: function() {
-                return _.map(window.checkoutConfig.payment.mangopay.transactionResults, function(value, key) {
-                    return {
-                        'value': key,
-                        'transaction_result': value
-                    }
-                });
             }
         });
     }
