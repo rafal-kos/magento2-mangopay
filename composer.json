@@ -7,7 +7,7 @@
     "AFL-3.0"
   ],
   "require": {
-    "magento/framework": "~101.0|~102.0",
+    "magento/framework": "~102.0",
     "filp/whoops": "^2.1",
     "jdorn/sql-formatter": "^1.2",
     "symfony/var-dumper": "*",
